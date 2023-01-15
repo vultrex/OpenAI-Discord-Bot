@@ -21,11 +21,11 @@ client.on('messageCreate', async message => {
 					const response = await openai.createCompletion({
 						model: "text-davinci-003",
 						prompt: message.content,
-						max_tokens: 2048,
+						max_tokens: 500,
 						temperature: 1,
 						best_of: 3
 					});
-					await msg.edit({ content: response.data.choices[0].text.replace(/(\r\n|\n|\r)/gm, '') });
+					await msg.edit({ content: response.data.choices[0].text.replace(/(\r\n|\n|\r)/gm, '').substring(0, 2048) });
 				})
 
 			} catch(e) {
