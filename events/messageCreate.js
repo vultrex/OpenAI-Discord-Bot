@@ -15,8 +15,8 @@ client.on('messageCreate', async message => {
 
 	await Guild.findOne({guildID: message.guild.id}).then(async data => {
 		if(data.config.chatChannel === message.channel.id) {
+			const msg = await message.reply("Thinking. . .")
 			try {
-				await message.reply("Thinking. . .").then(async msg => {
 					const openai = new OpenAIApi(configuration);
 					const response = await openai.createCompletion({
 						model: "text-davinci-003",
@@ -27,11 +27,11 @@ client.on('messageCreate', async message => {
 					});
 					console.log(response.data.choices)
 					await msg.edit({ content: response.data.choices[0].text.replace(/(\r\n|\n|\r)/gm, '')});
-				})
+
 
 			} catch(e) {
 				if(e.response.data.error.message.includes("rate limit")) {
-					return message.reply("You have reached the rate limit. Please try again later.");
+					return msg.edit("You have reached the rate limit. Please try again later.");
 				}
 			}
 		}
