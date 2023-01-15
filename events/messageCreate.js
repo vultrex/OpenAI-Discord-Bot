@@ -23,7 +23,8 @@ client.on('messageCreate', async message => {
 						prompt: message.content,
 						max_tokens: 500,
 						temperature: 1,
-						best_of: 15
+						best_of: 15,
+						user: "user" + message.author.id
 					});
 					console.log(response.data.choices)
 					await msg.edit({ content: response.data.choices[0].text.replace(/(\r\n|\n|\r)/gm, '')});
