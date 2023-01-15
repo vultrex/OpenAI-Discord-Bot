@@ -27,7 +27,7 @@ client.on('messageCreate', async message => {
 						user: "user" + message.author.id
 					});
 					console.log(response.data.choices)
-					await msg.edit({ content: response.data.choices[0].text.replace(/(\r\n|\n|\r)/gm, '')});
+					await msg.edit({ content: response.data.choices[0].text.replace(/(\r\n|\n|\r)/gm, ' ')});
 
 
 			} catch(e) {
