@@ -14,7 +14,7 @@ client.on('messageCreate', async message => {
 	if(message.channel.type !== 0) return;
 
 	await Guild.findOne({guildID: message.guild.id}).then(async data => {
-		if(data.config.chatChannel === message.channel.id) {
+		if(data.config.chatChannel === message.channel.id && !message.content.startsWith("-")) {
 			const msg = await message.reply("Thinking. . .")
 			try {
 					const openai = new OpenAIApi(configuration);
