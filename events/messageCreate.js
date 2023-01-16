@@ -33,6 +33,8 @@ client.on('messageCreate', async message => {
 			} catch(e) {
 				if(e.response.data.error.message.includes("rate limit")) {
 					return msg.edit("You have reached the rate limit. Please try again later.");
+				} else {
+					return msg.edit("An error occured. Please try again later.");
 				}
 			}
 		}
