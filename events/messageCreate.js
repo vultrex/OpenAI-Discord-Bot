@@ -13,10 +13,11 @@ client.on('messageCreate', async message => {
 	if(message.author.bot) return;
 	if(message.channel.type !== 0) return;
 
-	await Guild.findOne({guildID: message.guild.id}).then(async data => {
-		if(data.config.chatChannel === message.channel.id && !message.content.startsWith("-")) {
-			const msg = await message.reply("Thinking. . .")
-			try {
+	try {
+		await Guild.findOne({guildID: message.guild.id}).then(async data => {
+			if(data.config.chatChannel === message.channel.id && !message.content.startsWith("-")) {
+				const msg = await message.reply("Thinking. . .")
+				try {
 					const openai = new OpenAIApi(configuration);
 					const response = await openai.createCompletion({
 						model: "text-davinci-003",
@@ -30,15 +31,20 @@ client.on('messageCreate', async message => {
 					await msg.edit({ content: response.data.choices[0].text.replace(/(\r\n|\n|\r)/gm, ' ')});
 
 
-			} catch(e) {
-				if(e.response.data.error.message.includes("rate limit")) {
-					return msg.edit("You have reached the rate limit. Please try again later.");
-				} else {
-					return msg.edit("An error occured. Please try again later.");
+				} catch(e) {
+					if(e.response.data.error.message.includes("rate limit")) {
+						return msg.edit("You have reached the rate limit. Please try again later.");
+					} else {
+						return msg.edit("An error occured. Please try again later.");
+					}
 				}
 			}
-		}
-	})
+		})
+	} catch(e) {
+		return message.channel.send({
+			content: "Looks like there was an error, try again"
+		})
+	}
 
 	if(!message.content.startsWith(prefix)) return; 
 	const args = message.content.slice(prefix.length).trim().split(/ +/g); 
